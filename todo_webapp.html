@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>work TO TODO List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+    .todo-list {
+      margin-bottom: 10px;
+      perspective: 1000px;
+    }
+    .todo-item {
+      position: relative;
+      padding: 10px;
+      background-color: #f2f2f2;
+      border-bottom: 1px solid #ddd;
+      transition: transform 0.3s;
+      transform-style: preserve-3d;
+    }
+    .todo-item:hover {
+      transform: rotateX(15deg);
+    }
+    .todo-item.completed {
+      background-color: #ddd;
+    }
+    .todo-item .checkbox {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+    .todo-item .checkbox:before {
+      content: "\2713";
+      display: block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ddd;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+      color: #ddd;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .todo-item.completed .checkbox:before {
+      background-color: #4CAF50;
+      border-color: #4CAF50;
+      color: white;
+    }
+    .todo-item .content {
+      font-size: 16px;
+    }
+    .add-todo input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: none;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>3D TODO List</h1>
+    </div>
+    <div class="todo-list" id="todoList">
+    </div>
+    <div class="add-todo">
+      <input type="text" id="todoInput" placeholder="Add a new task...">
+      <button onclick="addTodo()">Add</button>
+    </div>
+  </div>
+
+  <script>
+    var todos = [];
+
+    // Function to render the todo list
+    function renderTodoList() {
+      var todoList = document.getElementById("todoList");
+      todoList.innerHTML = "";
+
+      for (var i = 0; i < todos.length; i++) {
+        var todo = todos[i];
+
+        var todoItem = document.createElement("div");
+        todoItem.className = "todo-item" + (todo.completed ? " completed" : "");
+
+        var checkbox = document.createElement("div");
+        checkbox.className = "checkbox";
+        checkbox.addEventListener("click", toggleTodo.bind(null, i));
+
+        var content = document.createElement("div");
+        content.className = "content";
+        content.innerText = todo.text;
+
+        todoItem.appendChild(checkbox);
+        todoItem.appendChild(content);
+        todoList.appendChild(todoItem);
+      }
+    }
+
+    // Function to add a new todo
+    function addTodo() {
+      var todoInput = document.getElementById("todoInput");
+      var todoText = todoInput.value.trim();
+
+      if (todoText !== "") {
+        var todo = {
+          text: todoText,
+          completed: false
+        };
+
+        todos.push(todo);
+        renderTodoList();
+        todoInput.value = "";
+      }
+    }
+
+    // Function to toggle the completion status of a todo
+    function toggleTodo(index) {
+      todos[index].completed = !todos[index].completed;
+      renderTodoList();
+    }
+
+    // Initial rendering of the todo list
+    renderTodoList();
+  </script>
+</body>
+</html>
